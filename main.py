@@ -6,6 +6,12 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 # Add src to path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -144,7 +150,7 @@ def create_visualizations(df: pd.DataFrame, metrics: dict, config: Config) -> No
     plt.tight_layout()
     save_plot(fig, config.output_dir / "ordered_evaluation.png", dpi=300)
     plt.close(fig)
-    print(f" Evaluation plot saved -> {config.output_dir / 'ordered_evaluation.png'}")
+    logger.info(f" Evaluation plot saved -> {config.output_dir / 'ordered_evaluation.png'}")
 
 
 def main() -> None:
@@ -158,24 +164,24 @@ def main() -> None:
     config = parse_config(config_dict, script_dir)
     
     # Simulate series
-    print("Simulating time series...")
+    logger.info("Simulating time series...")
     df = simulate_series(config)
-    print(f"Generated {len(df)} data points")
+    logger.info(f"Generated {len(df)} data points")
     
     # Compute metrics
-    print("\nComputing evaluation metrics...")
+    logger.info("\nComputing evaluation metrics...")
     metrics = compute_metrics(df)
     
-    print(f"\nEvaluation Metrics:")
-    print(f"  Model A Kappa: {metrics['kappa_a']:.4f}")
-    print(f"  Model B Kappa: {metrics['kappa_b']:.4f}")
-    print(f"  Wilcoxon p-value: {metrics['wilcoxon_p']:.4f}")
+    logger.info(f"\nEvaluation Metrics:")
+    logger.info(f"  Model A Kappa: {metrics['kappa_a']:.4f}")
+    logger.info(f"  Model B Kappa: {metrics['kappa_b']:.4f}")
+    logger.info(f"  Wilcoxon p-value: {metrics['wilcoxon_p']:.4f}")
     
     # Create visualizations
-    print("\nCreating visualizations...")
+    logger.info("\nCreating visualizations...")
     create_visualizations(df, metrics, config)
     
-    print("\n Ordered evaluation complete")
+    logger.info("\n Ordered evaluation complete")
 
 
 if __name__ == "__main__":
