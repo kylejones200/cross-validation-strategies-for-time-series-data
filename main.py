@@ -107,49 +107,50 @@ def compute_metrics(df: pd.DataFrame) -> dict:
     }
 
 
-def create_visualizations(df: pd.DataFrame, metrics: dict, config: Config) -> None:
+def create_visualizations(df: pd.DataFrame, metrics: dict, config: Config, plot: bool = False) -> None:
     """Create evaluation visualizations."""
-    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+    if plot:
+        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     
     # Confusion matrices
-    cm_a = confusion_matrix(df["True"], df["Model_A"])
-    cm_b = confusion_matrix(df["True"], df["Model_B"])
+        cm_a = confusion_matrix(df["True"], df["Model_A"])
+        cm_b = confusion_matrix(df["True"], df["Model_B"])
     
-    sns.heatmap(cm_a, annot=True, fmt="d", ax=axes[0, 0], cmap="Blues")
-    axes[0, 0].set_title(f"Model A Confusion Matrix (κ={metrics['kappa_a']:.3f})")
-    axes[0, 0].set_xlabel("Predicted")
-    axes[0, 0].set_ylabel("Actual")
+        sns.heatmap(cm_a, annot=True, fmt="d", ax=axes[0, 0], cmap="Blues")
+        axes[0, 0].set_title(f"Model A Confusion Matrix (κ={metrics['kappa_a']:.3f})")
+        axes[0, 0].set_xlabel("Predicted")
+        axes[0, 0].set_ylabel("Actual")
     
-    sns.heatmap(cm_b, annot=True, fmt="d", ax=axes[0, 1], cmap="Oranges")
-    axes[0, 1].set_title(f"Model B Confusion Matrix (κ={metrics['kappa_b']:.3f})")
-    axes[0, 1].set_xlabel("Predicted")
-    axes[0, 1].set_ylabel("Actual")
+        sns.heatmap(cm_b, annot=True, fmt="d", ax=axes[0, 1], cmap="Oranges")
+        axes[0, 1].set_title(f"Model B Confusion Matrix (κ={metrics['kappa_b']:.3f})")
+        axes[0, 1].set_xlabel("Predicted")
+        axes[0, 1].set_ylabel("Actual")
     
     # Error comparison
-    error_a = (df["True"] - df["Model_A"]).abs()
-    error_b = (df["True"] - df["Model_B"]).abs()
+        error_a = (df["True"] - df["Model_A"]).abs()
+        error_b = (df["True"] - df["Model_B"]).abs()
     
-    axes[1, 0].plot(range(len(error_a)), error_a, "b-", alpha=0.6, label="Model A Error")
-    axes[1, 0].plot(range(len(error_b)), error_b, "r-", alpha=0.6, label="Model B Error")
-    axes[1, 0].set_xlabel("Time")
-    axes[1, 0].set_ylabel("Absolute Error")
-    axes[1, 0].set_title(f"Error Comparison (Wilcoxon p={metrics['wilcoxon_p']:.4f})")
-    axes[1, 0].legend(loc="best")
-    axes[1, 0].grid(True, alpha=0.3)
+        axes[1, 0].plot(range(len(error_a)), error_a, "b-", alpha=0.6, label="Model A Error")
+        axes[1, 0].plot(range(len(error_b)), error_b, "r-", alpha=0.6, label="Model B Error")
+        axes[1, 0].set_xlabel("Time")
+        axes[1, 0].set_ylabel("Absolute Error")
+        axes[1, 0].set_title(f"Error Comparison (Wilcoxon p={metrics['wilcoxon_p']:.4f})")
+        axes[1, 0].legend(loc="best")
+        axes[1, 0].grid(True, alpha=0.3)
     
     # True vs predictions scatter
-    axes[1, 1].scatter(df["True"], df["Model_A"], alpha=0.6, s=20, label="Model A")
-    axes[1, 1].scatter(df["True"], df["Model_B"], alpha=0.6, s=20, label="Model B")
-    axes[1, 1].plot([df["True"].min(), df["True"].max()], [df["True"].min(), df["True"].max()], "k--", lw=2, label="Perfect")
-    axes[1, 1].set_xlabel("True")
-    axes[1, 1].set_ylabel("Predicted")
-    axes[1, 1].set_title("True vs Predicted")
-    axes[1, 1].legend(loc="best")
-    axes[1, 1].grid(True, alpha=0.3)
+        axes[1, 1].scatter(df["True"], df["Model_A"], alpha=0.6, s=20, label="Model A")
+        axes[1, 1].scatter(df["True"], df["Model_B"], alpha=0.6, s=20, label="Model B")
+        axes[1, 1].plot([df["True"].min(), df["True"].max()], [df["True"].min(), df["True"].max()], "k--", lw=2, label="Perfect")
+        axes[1, 1].set_xlabel("True")
+        axes[1, 1].set_ylabel("Predicted")
+        axes[1, 1].set_title("True vs Predicted")
+        axes[1, 1].legend(loc="best")
+        axes[1, 1].grid(True, alpha=0.3)
     
-    plt.tight_layout()
-    save_plot(fig, config.output_dir / "ordered_evaluation.png", dpi=300)
-    plt.close(fig)
+        plt.tight_layout()
+        save_plot(fig, config.output_dir / "ordered_evaluation.png", dpi=300)
+        plt.close(fig)
     logger.info(f" Evaluation plot saved -> {config.output_dir / 'ordered_evaluation.png'}")
 
 
