@@ -4,7 +4,7 @@ Time series cross-validation differs fundamentally from standard cross-validatio
 
 ## Time Series Split
 
-The **TimeSeriesSplit** method is a common way to perform cross-validation in time series. It ensures that the training data always precedes the validation data.
+The TimeSeriesSplit method is a common way to perform cross-validation in time series. It ensures that the training data always precedes the validation data.
 
 from sklearn.model_selection import TimeSeriesSplit
 
