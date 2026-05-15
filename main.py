@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import logging
@@ -15,7 +14,6 @@ logger = logging.getLogger(__name__)
 # Add src to path
 
 from dataclasses import dataclass
-from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,7 +24,6 @@ import seaborn as sns
 from src import (
     load_config,
     ensure_output_dir,
-    get_output_dir,
     save_plot,
 )
 
@@ -172,7 +169,7 @@ def main() -> None:
     logger.info("\nComputing evaluation metrics...")
     metrics = compute_metrics(df)
     
-    logger.info(f"\nEvaluation Metrics:")
+    logger.info("\nEvaluation Metrics:")
     logger.info(f"  Model A Kappa: {metrics['kappa_a']:.4f}")
     logger.info(f"  Model B Kappa: {metrics['kappa_b']:.4f}")
     logger.info(f"  Wilcoxon p-value: {metrics['wilcoxon_p']:.4f}")
