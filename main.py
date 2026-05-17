@@ -70,7 +70,7 @@ def simulate_series(config: Config) -> pd.DataFrame:
         last = true[-1]
         move = rng.choice([-1, 0, 1], p=[0.1, 0.8, 0.1])
         next_val = int(np.clip(last + move, min(labels), max(labels)))
-        pd.concat([true, next_val])
+        true.append(next_val)
 
     model_a = [
         int(np.clip(x - rng.choice([0, 1], p=[0.8, 0.2]), min(labels), max(labels)))
