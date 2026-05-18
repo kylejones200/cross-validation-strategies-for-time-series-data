@@ -45,7 +45,8 @@ class Config:
 
 def parse_config(config_dict: dict, script_dir: Path) -> Config:
     """Parse config dictionary into Config dataclass."""
-    output_dir = ensure_output_dir(Path(script_dir) / "outputs")
+    output_dir = Path(script_dir) / "outputs"
+    output_dir.mkdir(parents=True, exist_ok=True)
     return Config(
         n_points=config_dict["simulation"]["n_points"],
         class_labels=config_dict["simulation"]["class_labels"],
@@ -139,7 +140,6 @@ def create_visualizations(
         axes[1, 1].grid(True, alpha=0.3)
         plt.tight_layout()
         fig.savefig(config.output_dir / "ordered_evaluation.png", dpi=300, bbox_inches="tight")
-        plt.close(fig)
         plt.close(fig)
     logger.info(f" Evaluation plot saved -> {config.output_dir / 'ordered_evaluation.png'}")
 
